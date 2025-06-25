@@ -1,12 +1,10 @@
 # OliveLab_MabCellProfiler
 Files pertaining to the CellProfiler pipelines used by the Olive Research Group at Michigan State University. Built using CellProfiler 4.2.6
 These pipelines were developed to quantify the ratio of NF-κb in the nucleus to the cytosol, based on the MFI of staining in each cell. This ratio serves as a measure of translocation.
-
 This repository contains two CellProfiler pipelines, one for each macrophage cell type analyzed in our study:
 -one optimized for bone marrow-derived macrophages (BMDMs)
 -one optimized for fetal liver-derived alveolar-like macrophages (FLAMs)
 The pipelines are identical in all steps, except for the secondary object identification step (cell edge detection). This step was customized for each cell type due to their distinct morphologies, which required optimized segmentation parameters.
-
 #Requirements
 - CellProfiler (https://cellprofiler.org/) version 4.2.6
 ##How to use
