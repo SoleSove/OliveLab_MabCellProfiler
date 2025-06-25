@@ -1,0 +1,378 @@
+CellProfiler Pipeline: http://www.cellprofiler.org
+Version:5
+DateRevision:426
+GitHash:
+ModuleCount:19
+HasImagePlaneDetails:False
+
+Images:[module_num:1|svn_version:'Unknown'|variable_revision_number:2|show_window:False|notes:['To begin creating your project, use the Images module to compile a list of files and/or folders that you want to analyze. You can also specify a set of rules to include only the desired files in your selected folders.']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    :
+    Filter images?:Custom
+    Select the rule criteria:or (extension does isimage) (or (file does contain "")) (file does contain "") (file does contain "") (file does contain "")
+
+Metadata:[module_num:2|svn_version:'Unknown'|variable_revision_number:6|show_window:False|notes:['The Metadata module optionally allows you to extract information describing your images (i.e, metadata) which will be stored along with your measurements. This information can be contained in the file name and/or location, or in an external file.', '', "Here we're going to extract the well location that each image was taken in.  We'll also collect the folder the images reside in, so that we can match the illumination correction function with each well next step in NamesAndTypes."]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Extract metadata?:Yes
+    Metadata data type:Text
+    Metadata types:{}
+    Extraction method count:2
+    Metadata extraction method:Extract from file/folder names
+    Metadata source:File name
+    Regular expression to extract from file name:^Channel (?P<ChannelNumber>[0-9])-[0-9]{2}-(?P<WellRow>[A-P])-(?P<WellCol>[0-9]{2})
+    Regular expression to extract from folder name:(?P<Date>[0-9]{4}_[0-9]{2}_[0-9]{2})$
+    Extract metadata from:All images
+    Select the filtering criteria:and (file does contain "")
+    Metadata file location:Elsewhere...|
+    Match file and image metadata:[]
+    Use case insensitive matching?:No
+    Metadata file name:
+    Does cached metadata exist?:Yes
+    Metadata extraction method:Extract from file/folder names
+    Metadata source:Folder name
+    Regular expression to extract from file name:^(?P<Plate>.*)_(?P<Well>[A-P][0-9]{2})_s(?P<Site>[0-9])_w(?P<ChannelNumber>[0-9])
+    Regular expression to extract from folder name:(?P<Folder>.*)$
+    Extract metadata from:All images
+    Select the filtering criteria:and (file does contain "")
+    Metadata file location:Elsewhere...|
+    Match file and image metadata:[]
+    Use case insensitive matching?:No
+    Metadata file name:
+    Does cached metadata exist?:No
+
+NamesAndTypes:[module_num:3|svn_version:'Unknown'|variable_revision_number:8|show_window:False|notes:['The NamesAndTypes module allows you to assign a meaningful name to each image by which other modules will refer to it.', ' ---', ' Load the images by matching files in the folder against the unique text pattern for each stain: Channel 1 for protein', ' Channel 2 for the nuclei image. Also', ' exactly match the text for the illumination correction function file names. ', ' ', ' ---', ' So that you can match each wells images to the single set of illumination correction functions', ' rather than matching the image set by Order weve matched it by Metadata', ' which allows us to instruct CellProfiler that each well will have its own set of OrigDNA and OrigProtein images but that theyll all use the illumination correction function found in the same folder.', ' ', ' ']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Assign a name to:Images matching rules
+    Select the image type:Grayscale image
+    Name to assign these images:DNA
+    Match metadata:[{'DAPI': 'Folder', 'GFP': 'ChannelNumber', 'AlexaFluor633': 'Folder'}, {'DAPI': 'Well', 'GFP': 'Well', 'AlexaFluor633': 'Well'}]
+    Image set matching method:Order
+    Set intensity range from:Image metadata
+    Assignments count:3
+    Single images count:0
+    Maximum intensity:255.0
+    Process as 3D?:No
+    Relative pixel spacing in X:1.0
+    Relative pixel spacing in Y:1.0
+    Relative pixel spacing in Z:1.0
+    Select the rule criteria:and (file does contain "C1-")
+    Name to assign these images:DAPI
+    Name to assign these objects:Cell
+    Select the image type:Grayscale image
+    Set intensity range from:Image metadata
+    Maximum intensity:255.0
+    Select the rule criteria:and (file does contain "C2-")
+    Name to assign these images:GFP
+    Name to assign these objects:Nucleus
+    Select the image type:Grayscale image
+    Set intensity range from:Image metadata
+    Maximum intensity:255.0
+    Select the rule criteria:and (file does contain "C3-")
+    Name to assign these images:AlexaFluor633
+    Name to assign these objects:Speckle
+    Select the image type:Grayscale image
+    Set intensity range from:Image metadata
+    Maximum intensity:255.0
+
+Groups:[module_num:4|svn_version:'Unknown'|variable_revision_number:2|show_window:False|notes:['The Groups module optionally allows you to split your list of images into image subsets (groups) which will be processed independently of each other. Examples of groupings include screening batches, microtiter plates, time-lapse movies, etc.']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Do you want to group your images?:No
+    grouping metadata count:1
+    Metadata category:None
+
+IdentifyPrimaryObjects:[module_num:5|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:['Identify the nuclei from the nuclear stain image. ']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input image:DAPI
+    Name the primary objects to be identified:Nuclei
+    Typical diameter of objects, in pixel units (Min,Max):50,160
+    Discard objects outside the diameter range?:Yes
+    Discard objects touching the border of the image?:No
+    Method to distinguish clumped objects:Shape
+    Method to draw dividing lines between clumped objects:Shape
+    Size of smoothing filter:16
+    Suppress local maxima that are closer than this minimum allowed distance:5
+    Speed up by using lower-resolution image to find local maxima?:Yes
+    Fill holes in identified objects?:After both thresholding and declumping
+    Automatically calculate size of smoothing filter for declumping?:Yes
+    Automatically calculate minimum allowed distance between local maxima?:Yes
+    Handling of objects if excessive number of objects identified:Continue
+    Maximum number of objects:500
+    Use advanced settings?:Yes
+    Threshold setting version:12
+    Threshold strategy:Global
+    Thresholding method:Otsu
+    Threshold smoothing scale:2
+    Threshold correction factor:0.9
+    Lower and upper bounds on threshold:0.0,1.0
+    Manual threshold:0.0
+    Select the measurement to threshold with:None
+    Two-class or three-class thresholding?:Three classes
+    Log transform before thresholding?:No
+    Assign pixels in the middle intensity class to the foreground or the background?:Foreground
+    Size of adaptive window:10
+    Lower outlier fraction:0.05
+    Upper outlier fraction:0.05
+    Averaging method:Mean
+    Variance method:Standard deviation
+    # of deviations:2
+    Thresholding method:Otsu
+
+EnhanceOrSuppressFeatures:[module_num:6|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input image:GFP
+    Name the output image:EnhancedGFP
+    Select the operation:Enhance
+    Feature size:10
+    Feature type:Speckles
+    Range of hole sizes:1,10
+    Smoothing scale:2.0
+    Shear angle:0.0
+    Decay:0.95
+    Enhancement method:Tubeness
+    Speed and accuracy:Fast
+    Rescale result image:No
+
+IdentifyPrimaryObjects:[module_num:7|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input image:EnhancedGFP
+    Name the primary objects to be identified:Mabscessus
+    Typical diameter of objects, in pixel units (Min,Max):1,20
+    Discard objects outside the diameter range?:Yes
+    Discard objects touching the border of the image?:Yes
+    Method to distinguish clumped objects:Intensity
+    Method to draw dividing lines between clumped objects:Intensity
+    Size of smoothing filter:10
+    Suppress local maxima that are closer than this minimum allowed distance:7.0
+    Speed up by using lower-resolution image to find local maxima?:Yes
+    Fill holes in identified objects?:After both thresholding and declumping
+    Automatically calculate size of smoothing filter for declumping?:Yes
+    Automatically calculate minimum allowed distance between local maxima?:Yes
+    Handling of objects if excessive number of objects identified:Continue
+    Maximum number of objects:500
+    Use advanced settings?:No
+    Threshold setting version:12
+    Threshold strategy:Global
+    Thresholding method:Robust Background
+    Threshold smoothing scale:1.3488
+    Threshold correction factor:1.7
+    Lower and upper bounds on threshold:0.0,1.0
+    Manual threshold:0.0
+    Select the measurement to threshold with:None
+    Two-class or three-class thresholding?:Two classes
+    Log transform before thresholding?:No
+    Assign pixels in the middle intensity class to the foreground or the background?:Foreground
+    Size of adaptive window:50
+    Lower outlier fraction:0.05
+    Upper outlier fraction:0.05
+    Averaging method:Mean
+    Variance method:Standard deviation
+    # of deviations:2.0
+    Thresholding method:Robust Background
+
+IdentifySecondaryObjects:[module_num:8|svn_version:'Unknown'|variable_revision_number:10|show_window:False|notes:['Identify the cells by using the nuclei as a "seed" region, then growing outwards until stopped by the image threshold or by a neighbor. The Distance-B method is used to delineate the boundary between neighboring cells.']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input objects:Nuclei
+    Name the objects to be identified:CellOUTLINE
+    Select the method to identify the secondary objects:Distance - B
+    Select the input image:AlexaFluor633
+    Number of pixels by which to expand the primary objects:300
+    Regularization factor:5
+    Discard secondary objects touching the border of the image?:No
+    Discard the associated primary objects?:No
+    Name the new primary objects:FilteredNuclei
+    Fill holes in identified objects?:Yes
+    Threshold setting version:12
+    Threshold strategy:Adaptive
+    Thresholding method:Robust Background
+    Threshold smoothing scale:10
+    Threshold correction factor:0.5
+    Lower and upper bounds on threshold:0,1
+    Manual threshold:0
+    Select the measurement to threshold with:None
+    Two-class or three-class thresholding?:Three classes
+    Log transform before thresholding?:No
+    Assign pixels in the middle intensity class to the foreground or the background?:Foreground
+    Size of adaptive window:5
+    Lower outlier fraction:0.05
+    Upper outlier fraction:0.05
+    Averaging method:Mean
+    Variance method:Standard deviation
+    # of deviations:2
+    Thresholding method:Otsu
+
+IdentifyTertiaryObjects:[module_num:9|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the larger identified objects:CellOUTLINE
+    Select the smaller identified objects:Nuclei
+    Name the tertiary objects to be identified:Cytoplasm
+    Shrink smaller object prior to subtraction?:Yes
+
+RelateObjects:[module_num:10|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Parent objects:Mabscessus
+    Child objects:CellOUTLINE
+    Calculate child-parent distances?:None
+    Calculate per-parent means for all child measurements?:Yes
+    Calculate distances to other parents?:No
+    Do you want to save the children with parents as a new object set?:Yes
+    Name the output object:Infected_cells
+    Parent name:None
+
+IdentifyTertiaryObjects:[module_num:11|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:['Identify the cytoplasm by "subtracting" the nuclei objects from the cell objects.']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the larger identified objects:Infected_cells
+    Select the smaller identified objects:Nuclei
+    Name the tertiary objects to be identified:InfectedCytoplasm
+    Shrink smaller object prior to subtraction?:Yes
+
+MeasureObjectIntensity:[module_num:12|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:['Measure intensity features from nuclei, cell and cytoplasm objects against the corrected images.']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select images to measure:AlexaFluor633
+    Select objects to measure:Cytoplasm, InfectedCytoplasm, Nuclei
+
+CalculateMath:[module_num:13|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:['Calculate the nuclei-to-cell ratio of the mean protein intensity.']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Name the output measurement:Infected_Nuc_to_Cyto_NFkB_RATIO
+    Operation:Divide
+    Select the numerator measurement type:Object
+    Select the numerator objects:Nuclei
+    Select the numerator measurement:Intensity_MeanIntensity_AlexaFluor633
+    Multiply the above operand by:1
+    Raise the power of above operand by:1
+    Select the denominator measurement type:Object
+    Select the denominator objects:InfectedCytoplasm
+    Select the denominator measurement:Intensity_MeanIntensity_AlexaFluor633
+    Multiply the above operand by:1
+    Raise the power of above operand by:1
+    Take log10 of result?:No
+    Multiply the result by:1
+    Raise the power of result by:1
+    Add to the result:0
+    How should the output value be rounded?:Not rounded
+    Enter how many decimal places the value should be rounded to:0
+    Constrain the result to a lower bound?:No
+    Enter the lower bound:0
+    Constrain the result to an upper bound?:No
+    Enter the upper bound:1
+
+CalculateMath:[module_num:14|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Name the output measurement:general_nuc_to_cyto_NFkB_RATIO
+    Operation:Divide
+    Select the numerator measurement type:Object
+    Select the numerator objects:Nuclei
+    Select the numerator measurement:Intensity_MeanIntensity_AlexaFluor633
+    Multiply the above operand by:1.0
+    Raise the power of above operand by:1.0
+    Select the denominator measurement type:Object
+    Select the denominator objects:Cytoplasm
+    Select the denominator measurement:Intensity_MeanIntensity_AlexaFluor633
+    Multiply the above operand by:1.0
+    Raise the power of above operand by:1.0
+    Take log10 of result?:No
+    Multiply the result by:1.0
+    Raise the power of result by:1.0
+    Add to the result:0.0
+    How should the output value be rounded?:Not rounded
+    Enter how many decimal places the value should be rounded to:0
+    Constrain the result to a lower bound?:No
+    Enter the lower bound:0.0
+    Constrain the result to an upper bound?:No
+    Enter the upper bound:1.0
+
+GrayToColor:[module_num:15|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:["Creation of a color image to display segmentation: It's often nice to create an image showing the segmentation of the objects to refer back later and and scan the output images to make sure segmentation was successful.", 'Step 1: convert gray to color', 'Step 2: Overlay the outlines of identified objects onto the color image (module overlay outline)', '']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select a color scheme:RGB
+    Rescale intensity:Yes
+    Select the image to be colored red:AlexaFluor633
+    Select the image to be colored green:GFP
+    Select the image to be colored blue:DAPI
+    Name the output image:AlexaFl_Dapi_GFP
+    Relative weight for the red image:1.0
+    Relative weight for the green image:1.0
+    Relative weight for the blue image:1.0
+    Select the image to be colored cyan:Leave this black
+    Select the image to be colored magenta:Leave this black
+    Select the image to be colored yellow:Leave this black
+    Select the image that determines brightness:Leave this black
+    Relative weight for the cyan image:1.0
+    Relative weight for the magenta image:1.0
+    Relative weight for the yellow image:1.0
+    Relative weight for the brightness image:1.0
+    Hidden:1
+    Image name:None
+    Color:#ff0000
+    Weight:1.0
+
+SaveImages:[module_num:16|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the type of image to save:Image
+    Select the image to save:AlexaFl_Dapi_GFP
+    Select method for constructing file names:From image filename
+    Select image name for file prefix:GFP
+    Enter single file name:OrigBlue
+    Number of digits:4
+    Append a suffix to the image file name?:No
+    Text to append to the image name:
+    Saved file format:tiff
+    Output file location:Default Input Folder sub-folder|Cell profiler output BMDMs\\gray_to_color_images
+    Image bit depth:8-bit integer
+    Overwrite existing files without warning?:No
+    When to save:Every cycle
+    Record the file and path information to the saved image?:No
+    Create subfolders in the output folder?:No
+    Base image folder:Elsewhere...|
+    How to save the series:T (Time)
+    Save with lossless compression?:Yes
+
+OverlayOutlines:[module_num:17|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:['Overlay the nucleus and cell outlines on the protein image.']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Display outlines on a blank image?:No
+    Select image on which to display outlines:AlexaFl_Dapi_GFP
+    Name the output image:overlayimage
+    Outline display mode:Color
+    Select method to determine brightness of outlines:Max of image
+    How to outline:Inner
+    Select outline color:green
+    Select objects to display:Nuclei
+    Select outline color:yellow
+    Select objects to display:CellOUTLINE
+
+SaveImages:[module_num:18|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:["Save the nuclei overlay image as an 8-bit TIF, appending the text '_Outlined' to the original filename of the protein image."]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the type of image to save:Image
+    Select the image to save:overlayimage
+    Select method for constructing file names:From image filename
+    Select image name for file prefix:AlexaFluor633
+    Enter single file name:OrigProtein
+    Number of digits:4
+    Append a suffix to the image file name?:Yes
+    Text to append to the image name:_Outlined
+    Saved file format:tiff
+    Output file location:Default Output Folder|None
+    Image bit depth:8-bit integer
+    Overwrite existing files without warning?:No
+    When to save:Every cycle
+    Record the file and path information to the saved image?:No
+    Create subfolders in the output folder?:No
+    Base image folder:Elsewhere...|/Users/veneskey/svn/pipeline/ExampleImages/ExampleVitraImages
+    How to save the series:T (Time)
+    Save with lossless compression?:No
+
+ExportToSpreadsheet:[module_num:19|svn_version:'Unknown'|variable_revision_number:13|show_window:False|notes:["Export any measurements to a comma-delimited file (.csv). The measurements made for the nuclei, cell and cytoplasm objects will be saved to separate .csv files, in addition to the per-image .csv's."]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the column delimiter:Comma (",")
+    Add image metadata columns to your object data file?:No
+    Add image file and folder names to your object data file?:No
+    Select the measurements to export:Yes
+    Calculate the per-image mean values for object measurements?:Yes
+    Calculate the per-image median values for object measurements?:No
+    Calculate the per-image standard deviation values for object measurements?:Yes
+    Output file location:Default Output Folder|OneDrive - Michigan State University\\Mega Sole\\PhD MSU\\Olive Lab\\EXP\\FLAM vs HOX paper\\Microscopy\\OutputCellprofiler PIPELINE\\tables
+    Create a GenePattern GCT file?:No
+    Select source of sample row name:Metadata
+    Select the image to use as the identifier:None
+    Select the metadata to use as the identifier:None
+    Export all measurement types?:Yes
+    Press button to select measurements:Image|Count_Mabscessus,Image|Count_Nuclei,Image|Count_CellOUTLINE,Image|Count_InfectedCytoplasm,Image|PathName_GFP,Image|PathName_DAPI,Image|PathName_AlexaFluor633,Image|FileName_GFP,Image|FileName_AlexaFluor633,Image|FileName_DAPI,InfectedCytoplasm|Intensity_MeanIntensity_AlexaFluor633,InfectedCytoplasm|Number_Object_Number,InfectedCytoplasm|Math_Infected_Nuc_to_Cyto_NFkB_RATIO,Infected_cells|Number_Object_Number,Cytoplasm|Intensity_MeanIntensity_AlexaFluor633,Cytoplasm|Math_general_nuc_to_cyto_NFkB_RATIO,Cytoplasm|Number_Object_Number,Nuclei|Intensity_MeanIntensity_AlexaFluor633,Nuclei|Number_Object_Number,Mabscessus|Number_Object_Number,CellOUTLINE|Number_Object_Number,Experiment|Pipeline_Pipeline
+    Representation of Nan/Inf:NaN
+    Add a prefix to file names?:Yes
+    Filename prefix:Table_
+    Overwrite existing files without warning?:No
+    Data to export:Image
+    Combine these object measurements with those of the previous object?:No
+    File name:Image.csv
+    Use the object name for the file name?:Yes
+    Data to export:Nuclei
+    Combine these object measurements with those of the previous object?:No
+    File name:Nuclei.csv
+    Use the object name for the file name?:Yes
+    Data to export:Cells
+    Combine these object measurements with those of the previous object?:No
+    File name:Cells.csv
+    Use the object name for the file name?:Yes
+    Data to export:Cytoplasm
+    Combine these object measurements with those of the previous object?:No
+    File name:Cytoplasm.csv
+    Use the object name for the file name?:Yes
